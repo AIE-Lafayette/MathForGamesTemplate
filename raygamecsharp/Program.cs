@@ -26,6 +26,7 @@ using static Raylib_cs.Raylib;  // core methods (InitWindow, BeginDrawing())
 using static Raylib_cs.Color;   // color (RAYWHITE, MAROON, etc.)
 using static Raylib_cs.Raymath; // mathematics utilities and operations (Vector2Add, etc.)
 using System.Numerics;          // mathematics types (Vector2, Vector3, etc.)
+using Raylib_cs;
 
 namespace Examples
 {
@@ -41,23 +42,45 @@ namespace Examples
             InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window");
 
             SetTargetFPS(60);
+            
+            Camera3D camera = new Camera3D(new Vector3(10, 10, 10), new Vector3(0), new Vector3(0, 1, 0), 45);
+            Sphere sun = new Sphere(1,YELLOW);
+            Sphere planet = new Sphere(.5f, BLUE, sun);
+            planet.Translate(new Vector3(3, 0, 0));
+            //Model human = LoadModel("Models/FinalBaseMesh.obj");
             //--------------------------------------------------------------------------------------
-
+            sun.Translate(new Vector3(5, 0, 0));
+            float i = 0;
             // Main game loop
             while (!WindowShouldClose())    // Detect window close button or ESC key
             {
                 // Update
                 //----------------------------------------------------------------------------------
                 // TODO: Update your variables here
+                sun.Update();
+                planet.Update();
+                
                 //----------------------------------------------------------------------------------
-
+                sun.Rotate(i);
+                i += GetFrameTime();
                 // Draw
                 //----------------------------------------------------------------------------------
                 BeginDrawing();
-
                 ClearBackground(RAYWHITE);
 
-                DrawText("Congrats! You created your first window!", 190, 200, 20, MAROON);
+                BeginMode3D(camera);
+
+                sun.Draw();
+                planet.Draw();
+                //DrawModel(human, new Vector3(0),.2f,BROWN);
+                DrawGrid(10, 1.0f);
+
+                EndMode3D();
+
+                DrawText("Welcome to the third dimension!", 10, 40, 20, DARKGRAY);
+
+                DrawFPS(10, 10);
+
 
                 EndDrawing();
                 //----------------------------------------------------------------------------------
