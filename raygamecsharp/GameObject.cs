@@ -4,7 +4,7 @@ using System.Text;
 using System.Numerics;
 using static Raylib_cs.Raymath;
 using Raylib_cs;
-namespace Examples
+namespace raygamecsharp
 {
     abstract class GameObject
     {
@@ -14,15 +14,21 @@ namespace Examples
         protected GameObject _parent;
         protected Vector3 _velocity;
         protected float _scale;
+        private GameObject[] children;
+        public bool HasParent
+        {
+            get
+            {
+                return _parent != null;
+            }
+        }
+
 
         public GameObject()
         {
+            children = new GameObject[0];
             _scale = 1;
             _transform = MatrixIdentity();
-            if (_parent != null)
-            {
-                _transform = _transform * _parent.GetTransform();
-            }
             _rotationMatrix = MatrixIdentity();
             _translationMatrix = MatrixIdentity();
         }
@@ -31,6 +37,7 @@ namespace Examples
         {
             _scale = 1;
             _transform = MatrixIdentity();
+            children = new GameObject[0];
             if (_parent != null)
             {
                 _transform = _transform * _parent.GetTransform();
@@ -44,13 +51,15 @@ namespace Examples
         {
             _scale = 1;
             _transform = transform;
-            if (_parent != null)
-            {
-                _transform = _transform * _parent.GetTransform();
-            }
             _parent = parent;
             _rotationMatrix = MatrixIdentity();
             _translationMatrix = MatrixIdentity();
+            children = new GameObject[0];
+        }
+
+        public void SetParent(GameObject parent)
+        {
+            _parent = parent;
         }
 
         public void Translate(Vector3 direction)
@@ -60,7 +69,8 @@ namespace Examples
 
         public void Rotate(float angle)
         {
-            _rotationMatrix = MatrixRotateY(angle);
+            _transform.M11 = (float)Math.Cos(angle);
+            _transform.M13 = (float)Math.Sin(angle);
         }
 
         public Matrix4x4 GetTransform()
@@ -82,6 +92,11 @@ namespace Examples
             }
             
             _transform = _translationMatrix * _rotationMatrix * _scale;
+
+            for (int i = 0; i < children.Length; i++)
+            {
+                children[i].Update();
+            }
         }
 
         public abstract void Draw();

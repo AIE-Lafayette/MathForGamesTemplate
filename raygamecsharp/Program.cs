@@ -28,7 +28,7 @@ using static Raylib_cs.Raymath; // mathematics utilities and operations (Vector2
 using System.Numerics;          // mathematics types (Vector2, Vector3, etc.)
 using Raylib_cs;
 
-namespace Examples
+namespace raygamecsharp
 {
     public class core_basic_window
     {
@@ -44,8 +44,11 @@ namespace Examples
             SetTargetFPS(60);
             
             Camera3D camera = new Camera3D(new Vector3(10, 10, 10), new Vector3(0), new Vector3(0, 1, 0), 45);
+            Scene scene = new Scene();
             Sphere sun = new Sphere(1,YELLOW);
             Sphere planet = new Sphere(.5f, BLUE, sun);
+            scene.AddGameObject(sun);
+            scene.AddGameObject(planet);
             planet.Translate(new Vector3(3, 0, 0));
             //Model human = LoadModel("Models/FinalBaseMesh.obj");
             //--------------------------------------------------------------------------------------
@@ -57,12 +60,12 @@ namespace Examples
                 // Update
                 //----------------------------------------------------------------------------------
                 // TODO: Update your variables here
-                sun.Update();
-                planet.Update();
-                
-                //----------------------------------------------------------------------------------
                 sun.Rotate(i);
                 i += GetFrameTime();
+                scene.Update();
+                
+                //----------------------------------------------------------------------------------
+                
                 // Draw
                 //----------------------------------------------------------------------------------
                 BeginDrawing();
@@ -70,8 +73,7 @@ namespace Examples
 
                 BeginMode3D(camera);
 
-                sun.Draw();
-                planet.Draw();
+                scene.Draw();
                 //DrawModel(human, new Vector3(0),.2f,BROWN);
                 DrawGrid(10, 1.0f);
 

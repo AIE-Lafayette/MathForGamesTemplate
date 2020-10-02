@@ -4,7 +4,7 @@ using static Raylib_cs.Raymath; // mathematics utilities and operations (Vector2
 using System.Numerics;          // mathematics types (Vector2, Vector3, etc.)
 using Raylib_cs;
 
-namespace Examples
+namespace raygamecsharp
 {
     class Sphere : GameObject
     {
