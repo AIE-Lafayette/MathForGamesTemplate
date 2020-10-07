@@ -21,77 +21,20 @@
 *   Copyright (c) 2013-2016 Ramon Santamaria (@raysan5)
 *
 ********************************************************************************************/
-
-using static Raylib_cs.Raylib;  // core methods (InitWindow, BeginDrawing())
-using static Raylib_cs.Color;   // color (RAYWHITE, MAROON, etc.)
-using static Raylib_cs.Raymath; // mathematics utilities and operations (Vector2Add, etc.)
-using System.Numerics;          // mathematics types (Vector2, Vector3, etc.)
-using Raylib_cs;
+using MathForGames;
+using System;
 
 namespace raygamecsharp
 {
-    public class core_basic_window
+    public class Program
     {
         public static int Main()
         {
-            // Initialization
-            //--------------------------------------------------------------------------------------
-            const int screenWidth = 800;
-            const int screenHeight = 450;
+            //Create a new instance of the game class
+            Game game = new Game();
 
-            InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window");
-
-            SetTargetFPS(60);
-            
-            Camera3D camera = new Camera3D(new Vector3(10, 10, 10), new Vector3(0), new Vector3(0, 1, 0), 45);
-            Scene scene = new Scene();
-            Sphere sun = new Sphere(1,YELLOW);
-            Sphere planet = new Sphere(.5f, BLUE, sun);
-            scene.AddGameObject(sun);
-            scene.AddGameObject(planet);
-            planet.Translate(new Vector3(3, 0, 0));
-            //Model human = LoadModel("Models/FinalBaseMesh.obj");
-            //--------------------------------------------------------------------------------------
-            sun.Translate(new Vector3(5, 0, 0));
-            float i = 0;
-            // Main game loop
-            while (!WindowShouldClose())    // Detect window close button or ESC key
-            {
-                // Update
-                //----------------------------------------------------------------------------------
-                // TODO: Update your variables here
-                sun.Rotate(i);
-                i += GetFrameTime();
-                scene.Update();
-                
-                //----------------------------------------------------------------------------------
-                
-                // Draw
-                //----------------------------------------------------------------------------------
-                BeginDrawing();
-                ClearBackground(RAYWHITE);
-
-                BeginMode3D(camera);
-
-                scene.Draw();
-                //DrawModel(human, new Vector3(0),.2f,BROWN);
-                DrawGrid(10, 1.0f);
-
-                EndMode3D();
-
-                DrawText("Welcome to the third dimension!", 10, 40, 20, DARKGRAY);
-
-                DrawFPS(10, 10);
-
-
-                EndDrawing();
-                //----------------------------------------------------------------------------------
-            }
-
-            // De-Initialization
-            //--------------------------------------------------------------------------------------
-            CloseWindow();        // Close window and OpenGL context
-            //--------------------------------------------------------------------------------------
+            //Call run to begin the game.
+            game.Run();
 
             return 0;
         }
